@@ -16,4 +16,33 @@ class ExampleTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    /**
+     * @test
+     */
+    public function GetSurveyListByUser()
+    {
+        $this->withExceptionHandling();
+
+        $response = $this->getJson(route('survey.get_survey_list_by_user', ['user_id' => 1]));
+
+        $response->assertStatus(200);
+
+        $response->assertJsonStructure([
+            'state' => [
+                'hasError',
+                'codigoError',
+                'tipoError',
+                'mensajeError',
+                'mensajeDetalle',
+            ],
+            'result' => [
+                '*' => [
+                    'url',
+                    'name',
+                    'publicationDate',
+                ],
+            ],
+        ]);
+    }
 }
